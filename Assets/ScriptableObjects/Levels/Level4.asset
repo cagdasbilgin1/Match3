@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 343209274929d2a46a1cc8a802c7a46f, type: 3}
+  m_Name: Level4
+  m_EditorClassIdentifier: 
+  rows: 10
+  columns: 6
+  colors: 0000000001000000020000000300000004000000
+  firstSpecialIconTypeThreshold: 4
+  secondSpecialIconTypeThreshold: 7
+  thirdSpecialIconTypeThreshold: 9
+  levelJson: {fileID: 4900000, guid: 3f1125e3d5a95014b8a022039f5721a2, type: 3}
+  minimumBlastableMatch: 2
+  goalItemType: 4
+  goalCount: 30
+  movesCount: 30
