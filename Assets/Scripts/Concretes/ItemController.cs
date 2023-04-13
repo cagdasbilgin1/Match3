@@ -6,7 +6,7 @@ namespace CollapseBlast.Controller
 {
     public class ItemController : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] SpriteRenderer _spriteRenderer;
         ItemManager _itemManager;
         Cell _cell;
         FallAnimation _fallAnimation;
@@ -48,9 +48,10 @@ namespace CollapseBlast.Controller
             _fallAnimation = new FallAnimation(_itemManager.FallAnimData, this);
             transform.localPosition = pos;
 
-            if(_itemType == ItemType.Booster)
+            if(itemType == ItemType.Booster)
             {
-                ChangeSprite(boosterTypeIndex);
+                _typeIndex = boosterTypeIndex;
+                ChangeSprite(_typeIndex);
             }
         }
 

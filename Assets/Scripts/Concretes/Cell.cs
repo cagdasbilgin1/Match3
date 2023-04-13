@@ -57,7 +57,8 @@ namespace CollapseBlast
 
 		private void UpdateNeighbours()
 		{
-            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+			var neighBourDirections = new List<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
+            foreach (Direction direction in neighBourDirections)
             {
 				var neighbour = _board.GetNeighbourWithDirection(this, direction);
 				if (neighbour == null) continue;
@@ -67,6 +68,18 @@ namespace CollapseBlast
 					FallStopPosition = neighbour;
 				}
             }
+		}
+
+		public List<Cell> CellsInTheBombBoosterArea()
+		{
+			var _cellsInTheBombBoosterArea = new List<Cell>();
+			foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+			{
+				var cell = _board.GetNeighbourWithDirection(this, direction);
+				if(cell == null) continue;
+                _cellsInTheBombBoosterArea.Add(cell);
+			}
+			return _cellsInTheBombBoosterArea;
 		}
 
 		private void ArrangeCellName()

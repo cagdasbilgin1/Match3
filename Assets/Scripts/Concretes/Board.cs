@@ -1,9 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using CollapseBlast.Enums;
 using System.Collections.Generic;
 using System.Linq;
 using CollapseBlast.Manager;
+using CollapseBlast.Controller;
 
 namespace CollapseBlast
 {
@@ -16,14 +16,16 @@ namespace CollapseBlast
         public SpriteRenderer BoardInsideSprite;
         public SpriteMask BoardMask;
         [HideInInspector] public List<Cell> Cells;
+        ItemManager _itemManager;
         MatchFinder _matchFinder;
-
         private int _columns, _rows;
 
         public void Init()
         {
-            _columns = GameManager.Instance.Level.Columns;
-            _rows = GameManager.Instance.Level.Rows;
+            var gameManager = GameManager.Instance;
+            _columns = gameManager.Level.Columns;
+            _rows = gameManager.Level.Rows;
+            _itemManager = gameManager.ItemManager;
             _matchFinder = new MatchFinder();
 
             CreateCells();
@@ -117,13 +119,19 @@ namespace CollapseBlast
         {
             if (cell == null || cell.Item == null) return;
 
-            var tappedCellIsBooster = cell.Item.IsBooster;
-            var tappedCellTypeIndex = cell.Item.TypeIndex;
+            var tappedItem = cell.Item;
+            var tappedCellIsBooster = tappedItem.IsBooster;
+            var tappedCellTypeIndex = tappedItem.TypeIndex;
             DestroyMatchedItems(cell);
 
             if (!tappedCellIsBooster && tappedCellTypeIndex > 0) //create booster
             {
                 cell.Item = GameManager.Instance.ItemManager.CreateItem(ItemType.Booster, cell.transform.localPosition, tappedCellTypeIndex - 1);
+            }else if(tappedCellIsBooster)
+            {
+                var boosterIndex = tappedItem.TypeIndex;
+
+                _itemManager.ExecuteBooster(boosterIndex, cell);
             }
         }
 
@@ -166,6 +174,22 @@ namespace CollapseBlast
                 case Direction.Left:
                     x -= 1;
                     break;
+                case Direction.UpRight:
+                    x += 1;
+                    y += 1;
+                    break;
+                case Direction.UpLeft:
+                    x -= 1;
+                    y += 1;
+                    break;
+                case Direction.DownRight:
+                    x += 1;
+                    y -= 1;
+                    break;
+                case Direction.DownLeft:
+                    x -= 1;
+                    y -= 1;
+                    break;
             }
 
             if (x >= _columns || x < 0 || y >= _rows || y < 0) return null;
@@ -176,6 +200,27 @@ namespace CollapseBlast
         Cell GetCell(int x, int y)
         {
             return Cells.Single(cell => cell.X == x && cell.Y == y);
+        }
+
+        public Cell GetRandomCellAtBoard()
+        {
+            var x = Random.Range(0, _columns);
+            var y = Random.Range(0, _rows);
+
+            var cell = GetCell(x, y);
+            if (cell.Item != null && !cell.Item.IsBooster)
+            {
+                return cell;
+            }
+            else
+            {
+                return GetRandomCellAtBoard();
+            }
+        }
+
+        public List<Cell> GetCellsWithItemType(ItemType itemType)
+        {
+            return Cells.Where(cell => cell.Item.ItemType == itemType).ToList();
         }
     }
 }

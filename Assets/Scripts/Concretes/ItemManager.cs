@@ -2,6 +2,7 @@
 using CollapseBlast.Enums;
 using CollapseBlast.ScriptableObjects;
 using CollapseBlast.Controller;
+using System.Collections.Generic;
 
 namespace CollapseBlast.Manager
 {
@@ -26,12 +27,17 @@ namespace CollapseBlast.Manager
         [SerializeField] ItemTypesData _itemTypesData;
         [SerializeField] ItemController _itemPrefab;
         Transform _itemsParent;
+        LevelManager _levelManager;
+        Board _board;
 
         [HideInInspector] public FallAnimData FallAnimData;
 
         public void Init()
         {
-            _itemsParent = GameManager.Instance.Board.ItemsParent;
+            var gameManager = GameManager.Instance;
+            _itemsParent = gameManager.Board.ItemsParent;
+            _levelManager = gameManager.Level;
+            _board = gameManager.Board;
             FallAnimData = new FallAnimData(_startVelocity, _acceleration, _maxVelocity);
         }
 
@@ -62,6 +68,65 @@ namespace CollapseBlast.Manager
             var item = Instantiate(_itemPrefab, Vector3.zero, Quaternion.identity, _itemsParent).GetComponent<ItemController>();
             item.Init(itemType, itemSpawnPos, boosterTypeIndex);
             return item;
+        }
+
+        public void ExecuteBooster(int boosterIndex, Cell cell)
+        {
+            var goalItemType = _levelManager.CurrentLevelData.GoalItemType;
+            var blastedGoalItem = 0;
+            var cellsToExplode = new List<Cell>() { cell };
+
+
+            switch (boosterIndex)
+            {
+                case 0:
+                    var leftCell = _board.GetNeighbourWithDirection(cell, Direction.Left);
+                    var rightCell = _board.GetNeighbourWithDirection(cell, Direction.Right);
+                    while (true)
+                    {
+                        if (leftCell != null)
+                        {
+                            cellsToExplode.Add(leftCell);
+                            leftCell = _board.GetNeighbourWithDirection(leftCell, Direction.Left);
+                        }
+                        if (rightCell != null)
+                        {
+                            cellsToExplode.Add(rightCell);
+                            rightCell = _board.GetNeighbourWithDirection(rightCell, Direction.Right);
+                        }
+
+                        if (leftCell == null && rightCell == null) break;
+                    }
+
+                    break;
+
+                case 1:
+                    cellsToExplode.AddRange(cell.CellsInTheBombBoosterArea());
+                    break;
+
+                case 2:                    
+                    var rndItemType = _board.GetRandomCellAtBoard().Item.ItemType;
+                    cellsToExplode.AddRange(_board.GetCellsWithItemType(rndItemType));
+                    break;
+            }
+
+
+            foreach (var cellToExplode in cellsToExplode)
+            {
+                if (cellToExplode.Item.ItemType == goalItemType)
+                {
+                    blastedGoalItem++;
+                }
+
+                Debug.Log(cellToExplode.X + ":" + cellToExplode.Y);
+                if (cellToExplode.Item != null) cellToExplode.Item.Destroy();
+
+            }
+
+            if (blastedGoalItem > 0)
+            {
+                _levelManager.UpdateLevelStats(goalItemType, blastedGoalItem);
+            }
         }
     }
 }
