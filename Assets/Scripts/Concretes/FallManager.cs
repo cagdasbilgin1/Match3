@@ -54,12 +54,11 @@ namespace CollapseBlast.Manager
                 if (cell.Item == null)
                 {
                     var rndItemType = _itemTypes[Random.Range(0, _itemTypes.Count)];
-                    cell.Item = _itemManager.CreateItem(rndItemType);
                     var fallStopPosition = cell.GetFallTargetCell().FallStopPosition;        
                     var offsetY = fallStopPosition != null ? fallStopPosition.Item.transform.localPosition.y + 1 : 0f;
                     var fallStartPosition = cell.transform.localPosition + Vector3.up;
                     fallStartPosition.y = Mathf.Max(fallStartPosition.y, offsetY);
-                    cell.Item.transform.localPosition = fallStartPosition;
+                    cell.Item = _itemManager.CreateItem(rndItemType, fallStartPosition);
                     cell.Item.Fall();
                 }
             }

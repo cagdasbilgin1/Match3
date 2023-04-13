@@ -11,8 +11,12 @@ namespace CollapseBlast.Controller
         Cell _cell;
         FallAnimation _fallAnimation;
         ItemType _itemType;
+        int _typeIndex;
 
         public ItemType ItemType => _itemType;
+        public bool IsBooster => _itemType == ItemType.Booster;
+        public int TypeIndex { get { return _typeIndex; } set { _typeIndex = value; } }
+
 
         public Cell Cell
         {
@@ -37,16 +41,22 @@ namespace CollapseBlast.Controller
             }
         }
 
-        public void Init(ItemType itemType)
+        public void Init(ItemType itemType, Vector3 pos, int boosterTypeIndex)
         {
             _itemType = itemType;
             _itemManager = GameManager.Instance.ItemManager;
             _fallAnimation = new FallAnimation(_itemManager.FallAnimData, this);
+            transform.localPosition = pos;
+
+            if(_itemType == ItemType.Booster)
+            {
+                ChangeSprite(boosterTypeIndex);
+            }
         }
 
-        public void ChangeSprite(int index)
+        public void ChangeSprite(int typeIndex)
         {
-            _spriteRenderer.sprite = _itemManager.GetItemSprite(_itemType, index);
+            _spriteRenderer.sprite = _itemManager.GetItemSprite(_itemType, typeIndex);
         }
 
         public void Destroy()
@@ -54,7 +64,7 @@ namespace CollapseBlast.Controller
             _cell.Item = null;
             _cell = null;
             Destroy(gameObject);
-        }        
+        }
 
         public void Fall()
         {

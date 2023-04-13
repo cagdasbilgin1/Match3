@@ -8,5 +8,10 @@
         YellowBox,
         PurpleBox,
         PinkBox,
+        //Rocket,
+        //Tnt,
+        //LightBomb
+        
+        Booster
     }
 }

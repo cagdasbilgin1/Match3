@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using CollapseBlast.Enums;
 using CollapseBlast.ScriptableObjects;
+using UnityEngine;
 
 namespace CollapseBlast.Manager
 {
@@ -38,26 +40,28 @@ namespace CollapseBlast.Manager
                     var item = cells[i].Item;
                     i++;
 
-                    if (item == null) continue;
+                    if (item == null || item.ItemType == ItemType.Booster) continue;
 
                     item.ArrangeSorting();
 
                     if (matchedCellInfo[x, y] >= _currentLevelData.ThirdSpecialIconTypeThreshold)
                     {
-                        item.ChangeSprite(3);
+                        item.TypeIndex = 3;
                     }
                     else if (matchedCellInfo[x, y] >= _currentLevelData.SecondSpecialIconTypeThreshold)
                     {
-                        item.ChangeSprite(2);
+                        item.TypeIndex = 2;
                     }
                     else if (matchedCellInfo[x, y] >= _currentLevelData.FirstSpecialIconTypeThreshold)
                     {
-                        item.ChangeSprite(1);
+                        item.TypeIndex = 1;
                     }
                     else
                     {
-                        item.ChangeSprite(0);
+                        item.TypeIndex = 0;
                     }
+
+                    item.ChangeSprite(item.TypeIndex);
                 }
             }
         }

@@ -51,14 +51,16 @@ namespace CollapseBlast.Manager
                     return _itemTypesData.PurpleBoxes[index];
                 case ItemType.PinkBox:
                     return _itemTypesData.PinkBoxes[index];
+                case ItemType.Booster:
+                    return _itemTypesData.Boosters[index];
             }
             return null;
         }
         
-        public ItemController CreateItem(ItemType itemType)
+        public ItemController CreateItem(ItemType itemType, Vector3 itemSpawnPos, int boosterTypeIndex = 0)
         {
             var item = Instantiate(_itemPrefab, Vector3.zero, Quaternion.identity, _itemsParent).GetComponent<ItemController>();
-            item.Init(itemType);
+            item.Init(itemType, itemSpawnPos, boosterTypeIndex);
             return item;
         }
     }

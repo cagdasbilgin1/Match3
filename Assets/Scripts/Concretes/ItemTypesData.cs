@@ -12,6 +12,7 @@ namespace CollapseBlast.ScriptableObjects
         [SerializeField] List<Sprite> yellowBoxes;
         [SerializeField] List<Sprite> purpleBoxes;
         [SerializeField] List<Sprite> pinkBoxes;
+        [SerializeField] List<Sprite> boosters;
 
         public List<Sprite> RedBoxes => redBoxes;
         public List<Sprite> GreenBoxes => greenBoxes;
@@ -19,6 +20,7 @@ namespace CollapseBlast.ScriptableObjects
         public List<Sprite> YellowBoxes => yellowBoxes;
         public List<Sprite> PurpleBoxes => purpleBoxes;
         public List<Sprite> PinkBoxes => pinkBoxes;
+        public List<Sprite> Boosters => boosters;
     }
 }
 

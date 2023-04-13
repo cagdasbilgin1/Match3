@@ -119,8 +119,7 @@ namespace CollapseBlast.Manager
                 {
                     var itemType = DefineItemType(i);
                     var cell = _board.Cells[i];
-                    cell.Item = _itemManager.CreateItem(itemType);
-                    cell.Item.transform.position = cell.transform.position;
+                    cell.Item = _itemManager.CreateItem(itemType, cell.transform.localPosition);
                     i++;
                 }
             }

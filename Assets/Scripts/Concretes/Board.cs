@@ -117,16 +117,29 @@ namespace CollapseBlast
         {
             if (cell == null || cell.Item == null) return;
 
+            var tappedCellIsBooster = cell.Item.IsBooster;
+            var tappedCellTypeIndex = cell.Item.TypeIndex;
             DestroyMatchedItems(cell);
+
+            if (!tappedCellIsBooster && tappedCellTypeIndex > 0) //create booster
+            {
+                cell.Item = GameManager.Instance.ItemManager.CreateItem(ItemType.Booster, cell.transform.localPosition, tappedCellTypeIndex - 1);
+            }
         }
 
         private void DestroyMatchedItems(Cell cell)
         {
-            var partOfMatchedCells = _matchFinder.FindMatch(cell, cell.Item.ItemType);
+            var itemType = cell.Item.ItemType;
+            if (itemType == ItemType.Booster)
+            {
+                return;
+            }
+
+            var partOfMatchedCells = _matchFinder.FindMatch(cell, itemType);
 
             if (partOfMatchedCells == null) return;
 
-            GameManager.Instance.Level.UpdateLevelStats(cell.Item.ItemType, partOfMatchedCells.Count);
+            GameManager.Instance.Level.UpdateLevelStats(itemType, partOfMatchedCells.Count);
 
             foreach (var matchedCell in partOfMatchedCells)
             {
