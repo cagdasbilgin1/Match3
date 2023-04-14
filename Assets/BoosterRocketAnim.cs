@@ -6,11 +6,14 @@ namespace CollapseBlast.Controller
     public class BoosterRocketAnim : MonoBehaviour
     {
         [SerializeField] Transform piece1, piece2;
+        [SerializeField] ParticleSystem particle1, particle2;
         Camera _camera;
         Vector3 piece1Pos, piece2Pos;
         bool _isPlaying;
-        bool _piece1OutOfScreen => piece1Pos.x < 0 || piece1Pos.x > Screen.width || piece1Pos.y < 0 || piece1Pos.y > Screen.height;
-        bool _piece2OutOfScreen => piece2Pos.x < 0 || piece2Pos.x > Screen.width || piece2Pos.y < 0 || piece2Pos.y > Screen.height;
+        int xOffset = Screen.width;
+        int yOffset = Screen.height;
+        bool _piece1OutOfScreen => piece1Pos.x < -xOffset || piece1Pos.x > Screen.width + xOffset || piece1Pos.y < -yOffset || piece1Pos.y > Screen.height + yOffset;
+        bool _piece2OutOfScreen => piece2Pos.x < -xOffset || piece2Pos.x > Screen.width + xOffset || piece2Pos.y < -yOffset || piece2Pos.y > Screen.height + yOffset;
 
         void Start()
         {
@@ -22,8 +25,8 @@ namespace CollapseBlast.Controller
             if (isHorizontalRocket)
             {
                 transform.Rotate(0, 0, 90f, Space.Self);
-                piece1.DOMoveX(piece1.position.x + 10f, 1f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
-                piece2.DOMoveX(piece1.position.x - 10f, 1f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
+                piece1.DOMoveX(piece1.position.x - 10f, 1f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
+                piece2.DOMoveX(piece1.position.x + 10f, 1f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
             }
             else
             {
