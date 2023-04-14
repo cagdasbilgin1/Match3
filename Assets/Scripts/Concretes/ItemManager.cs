@@ -78,7 +78,6 @@ namespace CollapseBlast.Manager
         {
             var anim = Instantiate(_boosterAnimations.BoosterAnimations[boosterIndex], cell.transform.position, Quaternion.identity, _particlesAnimationsParent);
 
-
             var goalItemType = _levelManager.CurrentLevelData.GoalItemType;
             var blastedGoalItem = 0;
             var cellsToExplode = new List<Cell>() { cell };
@@ -87,46 +86,24 @@ namespace CollapseBlast.Manager
             switch (boosterIndex)
             {
                 case 0:
-                    var isHorizontalRocket = cell.Item.IsHorizontalRocketBooster;
 
-                    var direction1 = isHorizontalRocket ? Direction.Left : Direction.Up;
-                    var direction2 = isHorizontalRocket ? Direction.Right : Direction.Down;
-                    var cell1 = _board.GetNeighbourWithDirection(cell, direction1);
-                    var cell2 = _board.GetNeighbourWithDirection(cell, direction2);
-                    
-                    while (true)
-                    {
-                        if (cell1 != null)
-                        {
-                            cellsToExplode.Add(cell1);
-                            cell1 = _board.GetNeighbourWithDirection(cell1, direction1);
-                        }
-                        if (cell2 != null)
-                        {
-                            cellsToExplode.Add(cell2);
-                            cell2 = _board.GetNeighbourWithDirection(cell2, direction2);
-                        }
-
-                        if (cell1 == null && cell2 == null) break;
-                    }
-
-                    anim.GetComponent<BoosterRocketAnim>().ExecuteRocketAnim(isHorizontalRocket);
+                    anim.GetComponent<BoosterRocketAnim>().ExecuteAnim(cell);
 
                     break;
 
                 case 1:
-                    cellsToExplode.AddRange(cell.CellsInTheBombBoosterArea());
-                    StartCoroutine(DestroyAnimOnFinish(anim.GetComponent<Animator>()));
+
+                    anim.GetComponent<BoosterTntAnim>().ExecuteAnim(cell);
 
                     break;
 
                 case 2:
-                    var rndItemType = _board.GetRandomCellAtBoard().Item.ItemType;
-                    cellsToExplode.AddRange(_board.GetCellsWithItemType(rndItemType));
+                    anim.GetComponent<BoosterLightBombAnim>().ExecuteAnim(cell);
 
                     break;
             }
 
+            return; //sil
             //foreach (var cellToExplode in cellsToExplode)
             //{
             //    if (cellToExplode.Item.ItemType == goalItemType)

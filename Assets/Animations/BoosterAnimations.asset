@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boosterAnimations:
   - {fileID: 8323624258511502871, guid: 96607e0766d15d745883f3e9d82575d7, type: 3}
-  - {fileID: 2141108668187909454, guid: 01c4c510c693176439b9fecd6a6714f7, type: 3}
-  - {fileID: 0}
+  - {fileID: 3447321090854750025, guid: 34ca79b3e18b09547ae65459c5ceb537, type: 3}
+  - {fileID: 5539490650386678200, guid: d779e943aaf8e414890b5fbe1619e01b, type: 3}

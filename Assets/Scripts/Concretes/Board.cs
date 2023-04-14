@@ -28,6 +28,7 @@ namespace CollapseBlast
             _rows = gameManager.Level.Rows;
             _itemManager = gameManager.ItemManager;
             _matchFinder = new MatchFinder();
+            gameManager.CanvasManager.GamePlayCanvas.OnBackToMetaButtonClickEvent += ClearObsoleteParticlesAnimations;
 
             CreateCells();
             InitCells();
@@ -52,7 +53,7 @@ namespace CollapseBlast
 
             BoardOutsideSprite.transform.localScale = new Vector2(columnUnitWidth, columnUnitWidth);
 
-            var ItemEdgeUnit = Screen.width / _columns; 
+            var ItemEdgeUnit = Screen.width / _columns;
             float boardHeight = ItemEdgeUnit * _rows;
             float boardWidth = ItemEdgeUnit * _columns;
             while (boardHeight > Screen.height * .48f || boardWidth > Screen.width * .9f)
@@ -102,7 +103,7 @@ namespace CollapseBlast
         {
             foreach (var cell in Cells)
             {
-                if(cell.Item != null) Destroy(cell.Item.gameObject);
+                if (cell.Item != null) Destroy(cell.Item.gameObject);
                 Destroy(cell.gameObject);
             }
             Cells.Clear();
@@ -118,7 +119,7 @@ namespace CollapseBlast
 
         public void CellTapped(Cell cell)
         {
-            if (cell == null || cell.Item == null) return;
+            if (cell == null || cell.Item == null || cell.Item.IsNotClickable) return;
 
             var tappedItem = cell.Item;
             var tappedCellIsBooster = tappedItem.IsBooster;
@@ -128,7 +129,8 @@ namespace CollapseBlast
             if (!tappedCellIsBooster && tappedCellTypeIndex > 0) //create booster
             {
                 cell.Item = GameManager.Instance.ItemManager.CreateItem(ItemType.Booster, cell.transform.localPosition, tappedCellTypeIndex - 1);
-            }else if(tappedCellIsBooster)
+            }
+            else if (tappedCellIsBooster)
             {
                 var boosterIndex = tappedItem.TypeIndex;
 
@@ -171,7 +173,7 @@ namespace CollapseBlast
                     break;
                 case Direction.Right:
                     x += 1;
-                    break;                
+                    break;
                 case Direction.Left:
                     x -= 1;
                     break;
@@ -221,7 +223,15 @@ namespace CollapseBlast
 
         public List<Cell> GetCellsWithItemType(ItemType itemType)
         {
-            return Cells.Where(cell => cell.Item.ItemType == itemType).ToList();
+            return Cells.Where(cell => cell.Item?.ItemType == itemType).ToList();
+        }
+
+        void ClearObsoleteParticlesAnimations()
+        {
+            foreach (Transform obsoleteParticle in ParticlesAnimationsParent)
+            {
+                Destroy(obsoleteParticle.gameObject);
+            }
         }
     }
 }
