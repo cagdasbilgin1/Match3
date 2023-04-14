@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2907093172ebd47a800fe63118ded0, type: 3}
   m_Name: BoosterAnimations
   m_EditorClassIdentifier: 
-  boosterAnimators:
-  - {fileID: 1722459576117530706, guid: 01c4c510c693176439b9fecd6a6714f7, type: 3}
-  - {fileID: 0}
+  boosterAnimations:
+  - {fileID: 8323624258511502871, guid: 96607e0766d15d745883f3e9d82575d7, type: 3}
+  - {fileID: 2141108668187909454, guid: 01c4c510c693176439b9fecd6a6714f7, type: 3}
   - {fileID: 0}

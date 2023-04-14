@@ -17,6 +17,7 @@ namespace CollapseBlast.Controller
         public ItemType ItemType => _itemType;
         public bool IsBooster => _itemType == ItemType.Booster;
         public int TypeIndex { get { return _typeIndex; } set { _typeIndex = value; } }
+        public bool IsHorizontalRocketBooster;
 
 
         public Cell Cell
@@ -53,6 +54,12 @@ namespace CollapseBlast.Controller
             {
                 _typeIndex = boosterTypeIndex;
                 ChangeSprite(_typeIndex);
+
+                if (boosterTypeIndex == 0 && Random.value < 0.5f) // if booster rocket 50% chance horizontally or vertically
+                {
+                    transform.Rotate(0f, 0f, 90f, Space.Self);
+                    IsHorizontalRocketBooster = true;
+                }
             }
         }
 

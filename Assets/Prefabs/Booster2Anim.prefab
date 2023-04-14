@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1834248808560462270}
   - component: {fileID: 1722459576117530706}
   m_Layer: 6
-  m_Name: Booster1Animation
+  m_Name: Booster2Anim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

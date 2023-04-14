@@ -66,7 +66,7 @@ namespace CollapseBlast.Manager
             }
             return null;
         }
-        
+
         public ItemController CreateItem(ItemType itemType, Vector3 itemSpawnPos, int boosterTypeIndex = 0)
         {
             var item = Instantiate(_itemPrefab, Vector3.zero, Quaternion.identity, _itemsParent).GetComponent<ItemController>();
@@ -76,8 +76,8 @@ namespace CollapseBlast.Manager
 
         public void ExecuteBooster(int boosterIndex, Cell cell)
         {
-            var anim = Instantiate(_boosterAnimations.BoosterAnimators[0], cell.transform.position, Quaternion.identity, _particlesAnimationsParent);
-            
+            var anim = Instantiate(_boosterAnimations.BoosterAnimations[boosterIndex], cell.transform.position, Quaternion.identity, _particlesAnimationsParent);
+
 
             var goalItemType = _levelManager.CurrentLevelData.GoalItemType;
             var blastedGoalItem = 0;
@@ -87,47 +87,56 @@ namespace CollapseBlast.Manager
             switch (boosterIndex)
             {
                 case 0:
-                    var leftCell = _board.GetNeighbourWithDirection(cell, Direction.Left);
-                    var rightCell = _board.GetNeighbourWithDirection(cell, Direction.Right);
+                    var isHorizontalRocket = cell.Item.IsHorizontalRocketBooster;
+
+                    var direction1 = isHorizontalRocket ? Direction.Left : Direction.Up;
+                    var direction2 = isHorizontalRocket ? Direction.Right : Direction.Down;
+                    var cell1 = _board.GetNeighbourWithDirection(cell, direction1);
+                    var cell2 = _board.GetNeighbourWithDirection(cell, direction2);
+                    
                     while (true)
                     {
-                        if (leftCell != null)
+                        if (cell1 != null)
                         {
-                            cellsToExplode.Add(leftCell);
-                            leftCell = _board.GetNeighbourWithDirection(leftCell, Direction.Left);
+                            cellsToExplode.Add(cell1);
+                            cell1 = _board.GetNeighbourWithDirection(cell1, direction1);
                         }
-                        if (rightCell != null)
+                        if (cell2 != null)
                         {
-                            cellsToExplode.Add(rightCell);
-                            rightCell = _board.GetNeighbourWithDirection(rightCell, Direction.Right);
+                            cellsToExplode.Add(cell2);
+                            cell2 = _board.GetNeighbourWithDirection(cell2, direction2);
                         }
 
-                        if (leftCell == null && rightCell == null) break;
+                        if (cell1 == null && cell2 == null) break;
                     }
+
+                    anim.GetComponent<BoosterRocketAnim>().ExecuteRocketAnim(isHorizontalRocket);
 
                     break;
 
                 case 1:
                     cellsToExplode.AddRange(cell.CellsInTheBombBoosterArea());
+                    StartCoroutine(DestroyAnimOnFinish(anim.GetComponent<Animator>()));
+
                     break;
 
-                case 2:                    
+                case 2:
                     var rndItemType = _board.GetRandomCellAtBoard().Item.ItemType;
                     cellsToExplode.AddRange(_board.GetCellsWithItemType(rndItemType));
+
                     break;
             }
 
-            foreach (var cellToExplode in cellsToExplode)
-            {
-                if (cellToExplode.Item.ItemType == goalItemType)
-                {
-                    blastedGoalItem++;
-                }
+            //foreach (var cellToExplode in cellsToExplode)
+            //{
+            //    if (cellToExplode.Item.ItemType == goalItemType)
+            //    {
+            //        blastedGoalItem++;
+            //    }
 
-                if (cellToExplode.Item != null) cellToExplode.Item.GetComponentInChildren<SpriteRenderer>().sprite = null;
-            }
+            //    if (cellToExplode.Item != null) cellToExplode.Item.GetComponentInChildren<SpriteRenderer>().sprite = null;
+            //}
 
-            StartCoroutine(DestroyAnimOnFinish(anim));
 
             foreach (var cellToExplode in cellsToExplode)
             {
@@ -141,6 +150,7 @@ namespace CollapseBlast.Manager
 
             if (blastedGoalItem > 0)
             {
+                Debug.Log("blasted goal item " + blastedGoalItem);
                 _levelManager.UpdateLevelStats(goalItemType, blastedGoalItem);
             }
         }

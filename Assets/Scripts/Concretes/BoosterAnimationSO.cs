@@ -8,9 +8,9 @@ namespace CollapseBlast.ScriptableObjects
     [CreateAssetMenu(fileName = "BoosterAnimations", menuName = "CollapseBlast/BoosterAnimationsSO", order = 2)]
     public class BoosterAnimationSO : ScriptableObject
     {
-        [SerializeField] List<Animator> boosterAnimators;
+        [SerializeField] List<GameObject> boosterAnimations;
 
-        public List<Animator> BoosterAnimators => boosterAnimators;
+        public List<GameObject> BoosterAnimations => boosterAnimations;
     }
 }
 
