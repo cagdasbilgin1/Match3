@@ -12,6 +12,7 @@ namespace CollapseBlast
         public Cell CellPrefab;
         public Transform CellsParent;
         public Transform ItemsParent;
+        public Transform ParticlesAnimationsParent;
         public SpriteRenderer BoardOutsideSprite;
         public SpriteRenderer BoardInsideSprite;
         public SpriteMask BoardMask;

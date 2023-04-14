@@ -46,6 +46,9 @@ TagManager:
   - name: Item
     uniqueID: 3665787833
     locked: 0
+  - name: ParticlesAnimations
+    uniqueID: 2427226737
+    locked: 0
   - name: TopUI
     uniqueID: 2944524623
     locked: 0

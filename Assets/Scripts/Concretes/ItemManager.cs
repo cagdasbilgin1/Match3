@@ -3,6 +3,7 @@ using CollapseBlast.Enums;
 using CollapseBlast.ScriptableObjects;
 using CollapseBlast.Controller;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace CollapseBlast.Manager
 {
@@ -25,8 +26,10 @@ namespace CollapseBlast.Manager
         [SerializeField] float _acceleration = 0.3f;
         [SerializeField] float _maxVelocity = 12f;
         [SerializeField] ItemTypesData _itemTypesData;
+        [SerializeField] BoosterAnimationSO _boosterAnimations;
         [SerializeField] ItemController _itemPrefab;
         Transform _itemsParent;
+        Transform _particlesAnimationsParent;
         LevelManager _levelManager;
         Board _board;
 
@@ -36,6 +39,7 @@ namespace CollapseBlast.Manager
         {
             var gameManager = GameManager.Instance;
             _itemsParent = gameManager.Board.ItemsParent;
+            _particlesAnimationsParent = gameManager.Board.ParticlesAnimationsParent;
             _levelManager = gameManager.Level;
             _board = gameManager.Board;
             FallAnimData = new FallAnimData(_startVelocity, _acceleration, _maxVelocity);
@@ -72,6 +76,9 @@ namespace CollapseBlast.Manager
 
         public void ExecuteBooster(int boosterIndex, Cell cell)
         {
+            var anim = Instantiate(_boosterAnimations.BoosterAnimators[0], cell.transform.position, Quaternion.identity, _particlesAnimationsParent);
+            
+
             var goalItemType = _levelManager.CurrentLevelData.GoalItemType;
             var blastedGoalItem = 0;
             var cellsToExplode = new List<Cell>() { cell };
@@ -110,6 +117,17 @@ namespace CollapseBlast.Manager
                     break;
             }
 
+            foreach (var cellToExplode in cellsToExplode)
+            {
+                if (cellToExplode.Item.ItemType == goalItemType)
+                {
+                    blastedGoalItem++;
+                }
+
+                if (cellToExplode.Item != null) cellToExplode.Item.GetComponentInChildren<SpriteRenderer>().sprite = null;
+            }
+
+            StartCoroutine(DestroyAnimOnFinish(anim));
 
             foreach (var cellToExplode in cellsToExplode)
             {
@@ -118,15 +136,19 @@ namespace CollapseBlast.Manager
                     blastedGoalItem++;
                 }
 
-                Debug.Log(cellToExplode.X + ":" + cellToExplode.Y);
                 if (cellToExplode.Item != null) cellToExplode.Item.Destroy();
-
             }
 
             if (blastedGoalItem > 0)
             {
                 _levelManager.UpdateLevelStats(goalItemType, blastedGoalItem);
             }
+        }
+
+        IEnumerator DestroyAnimOnFinish(Animator anim)
+        {
+            yield return new WaitForSeconds(anim.runtimeAnimatorController.animationClips.Length);
+            Destroy(anim.gameObject);
         }
     }
 }

@@ -1684,6 +1684,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8767403435434524832, guid: 6320cab5fb5e220498d343ef1f172ca0, type: 3}
+      propertyPath: _itemPrefab
+      value: 
+      objectReference: {fileID: 7505205692469373977, guid: 26f8f46f235e6334690557ade4ea8688, type: 3}
+    - target: {fileID: 8767403435434524832, guid: 6320cab5fb5e220498d343ef1f172ca0, type: 3}
+      propertyPath: _boosterAnimations
+      value: 
+      objectReference: {fileID: 11400000, guid: 9424335a8a5d95845b1fd35e65bb2d6a, type: 2}
     - target: {fileID: 8767403435434524833, guid: 6320cab5fb5e220498d343ef1f172ca0, type: 3}
       propertyPath: m_RootOrder
       value: 3
