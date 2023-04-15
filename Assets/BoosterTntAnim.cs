@@ -40,6 +40,11 @@ namespace CollapseBlast.Controller
                 {
                     _blastedGoalItemCount++;
                 }
+                //if(item.ItemType == ItemType.Booster)
+                //{
+                //    GameManager.Instance.ItemManager.ExecuteBooster(item.TypeIndex, item.Cell);
+                //}
+
                 item.Destroy();
             }
         }

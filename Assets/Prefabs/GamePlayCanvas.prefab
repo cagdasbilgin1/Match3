@@ -2749,17 +2749,61 @@ PrefabInstance:
       value: GameOverUI
       objectReference: {fileID: 0}
     - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 4619109725164193299}
+      objectReference: {fileID: 4619109725164193304}
     - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4619109725164193304}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 4619109725164193304}
     - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
       objectReference: {fileID: 4619109725164193304}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnGoHomeButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OnClaimButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: OnClaimButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CollapseBlast.Canvas.GamePlayCanvas, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: CollapseBlast.Canvas.GamePlayCanvas, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040564192921006007, guid: ee62e31684a8fd343aba17d946412950, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: CollapseBlast.Canvas.GamePlayCanvas, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee62e31684a8fd343aba17d946412950, type: 3}
 --- !u!1 &4619109725489732698 stripped

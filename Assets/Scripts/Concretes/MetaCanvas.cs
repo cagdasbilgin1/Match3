@@ -1,5 +1,6 @@
 using CollapseBlast.Manager;
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,9 +8,8 @@ namespace CollapseBlast.Canvas
 {
     public class MetaCanvas : MonoBehaviour
     {
+        [SerializeField] List<GameObject> GameplaySceneElements;
         [SerializeField] TextMeshProUGUI levelButtonText;
-
-        public event Action OnLevelButtonClickEvent;
 
         private void Awake()
         {
@@ -26,7 +26,7 @@ namespace CollapseBlast.Canvas
 
         public void OnLevelButtonClick()
         {
-            OnLevelButtonClickEvent?.Invoke();
+            GameManager.Instance.ToggleScene();
         }
     }
 }

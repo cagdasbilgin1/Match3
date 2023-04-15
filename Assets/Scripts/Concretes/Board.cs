@@ -29,8 +29,7 @@ namespace CollapseBlast
             _rows = gameManager.Level.Rows;
             _itemManager = gameManager.ItemManager;
             _matchFinder = new MatchFinder();
-            gamePlayCanvas.OnBackToMetaButtonClickEvent += ClearObsoleteParticlesAnimations;
-            gamePlayCanvas.OnClaimButtonClickEcent += ClearObsoleteParticlesAnimations;
+            gameManager.metaSceneOpenedEvent += ClearObsoleteParticlesAnimations;
 
             CreateCells();
             InitCells();

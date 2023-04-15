@@ -2,8 +2,6 @@
 using CollapseBlast.Enums;
 using CollapseBlast.ScriptableObjects;
 using CollapseBlast.Controller;
-using System.Collections.Generic;
-using System.Collections;
 using CollapseBlast.Abstracts;
 
 namespace CollapseBlast.Manager

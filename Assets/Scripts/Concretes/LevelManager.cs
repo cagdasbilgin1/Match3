@@ -50,7 +50,7 @@ namespace CollapseBlast.Manager
 
             LoadJsonDatas();
 
-            gameManager.CanvasManager.GamePlayCanvas.OnBackToMetaButtonClickEvent += ResetLevel;
+            gameManager.metaSceneOpenedEvent += ResetLevel;
 
             _goalCount = _currentLevelData.GoalCount;
             _moveCount = _currentLevelData.MovesCount;
