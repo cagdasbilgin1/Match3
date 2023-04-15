@@ -17,19 +17,22 @@ namespace CollapseBlast
         public SpriteRenderer BoardInsideSprite;
         public SpriteMask BoardMask;
         [HideInInspector] public List<Cell> Cells;
+        GameManager _gameManager;
+        SoundManager _soundManager;
         ItemManager _itemManager;
         MatchFinder _matchFinder;
         private int _columns, _rows;
 
         public void Init()
         {
-            var gameManager = GameManager.Instance;
-            var gamePlayCanvas = gameManager.CanvasManager.GamePlayCanvas;
-            _columns = gameManager.Level.Columns;
-            _rows = gameManager.Level.Rows;
-            _itemManager = gameManager.ItemManager;
+            _gameManager = GameManager.Instance;
+            _soundManager = _gameManager.SoundManager;
+            var gamePlayCanvas = _gameManager.CanvasManager.GamePlayCanvas;
+            _columns = _gameManager.Level.Columns;
+            _rows = _gameManager.Level.Rows;
+            _itemManager = _gameManager.ItemManager;
             _matchFinder = new MatchFinder();
-            gameManager.metaSceneOpenedEvent += ClearObsoleteParticlesAnimations;
+            _gameManager.metaSceneOpenedEvent += ClearObsoleteParticlesAnimations;
 
             CreateCells();
             InitCells();
@@ -151,8 +154,8 @@ namespace CollapseBlast
 
             if (partOfMatchedCells == null) return;
 
-            GameManager.Instance.Level.UpdateLevelStats(itemType, partOfMatchedCells.Count);
-            GameManager.Instance.SoundManager.PlaySound(GameManager.Instance.SoundManager.GameSounds.ItemBlastSound);
+            _gameManager.Level.UpdateLevelStats(itemType, partOfMatchedCells.Count);
+            _soundManager.PlaySound(_soundManager.GameSounds.ItemBlastSound);
 
             foreach (var matchedCell in partOfMatchedCells)
             {

@@ -54,13 +54,6 @@ namespace CollapseBlast.Manager
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Level.LevelUp();
-                Board.ClearElements();
-                InitGame();
-            }
-
             FallManager.TickUpdate();
             HintManager.TickUpdate();
         }
