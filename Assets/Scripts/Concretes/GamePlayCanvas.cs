@@ -19,6 +19,7 @@ namespace CollapseBlast.Canvas
         LevelDataSO _levelData;
 
         public event Action OnBackToMetaButtonClickEvent;
+        public event Action OnClaimButtonClickEcent;
 
         private void Awake()
         {
@@ -69,6 +70,7 @@ namespace CollapseBlast.Canvas
 
         public void OnClaimButtonClick()
         {
+            OnClaimButtonClickEcent?.Invoke();
             var gameManager = GameManager.Instance;
             gameManager.Board.ClearElements();
             gameManager.InitGame();

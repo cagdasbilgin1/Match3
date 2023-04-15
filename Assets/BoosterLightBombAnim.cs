@@ -1,30 +1,36 @@
 using CollapseBlast;
+using CollapseBlast.Abstracts;
 using CollapseBlast.Controller;
+using CollapseBlast.Enums;
 using CollapseBlast.Manager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoosterLightBombAnim : MonoBehaviour
+public class BoosterLightBombAnim : MonoBehaviour, IBoosterAnim
 {
     [SerializeField] LineRenderer linePrefab;
     [SerializeField] GameObject glowVFXPrefab;
     [SerializeField] float destroyDelay = .5f;
 
+    LevelManager _level;
     List<LineRenderer> _lines = new List<LineRenderer>();
     List<GameObject> _particles = new List<GameObject>();
     List<Cell> _cellsToExplode = new List<Cell>();
     List<ItemController> _itemsToDestroy = new List<ItemController>();
     Transform _particleParent;
+    int _blastedGoalItemCount;
 
-    public void ExecuteAnim(Cell boosterCell)
+    public void ExecuteAnim(Cell boosterCell, LevelManager level)
     {
+        _level = level;
+        var goalItemType = _level.CurrentLevelData.GoalItemType;
         FindCells(boosterCell);
         PlayLightBombAnim(boosterCell);
-        StartCoroutine(FinishAnimDestroyItems());
+        StartCoroutine(FinishAnimDestroyItems(goalItemType));
     }
 
-    IEnumerator FinishAnimDestroyItems()
+    IEnumerator FinishAnimDestroyItems(ItemType goalItemType)
     {
         yield return new WaitForSeconds(destroyDelay);
 
@@ -38,8 +44,14 @@ public class BoosterLightBombAnim : MonoBehaviour
         }
         foreach (var item in _itemsToDestroy)
         {
-            item?.Destroy();
+            if (item == null) continue;
+            if (item.ItemType == goalItemType)
+            {
+                _blastedGoalItemCount++;
+            }
+            item.Destroy();
         }
+        UpdateGoalChart(goalItemType);
         Destroy(gameObject);
     }
 
@@ -67,5 +79,10 @@ public class BoosterLightBombAnim : MonoBehaviour
             line.SetPosition(1, cell.transform.localPosition);
             glowVFX.transform.localPosition = cell.transform.localPosition;
         }
+    }
+
+    void UpdateGoalChart(ItemType goalItemType)
+    {
+        _level.UpdateLevelStats(goalItemType, _blastedGoalItemCount);
     }
 }

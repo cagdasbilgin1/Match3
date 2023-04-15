@@ -1,17 +1,26 @@
+using CollapseBlast.Abstracts;
+using CollapseBlast.Enums;
+using CollapseBlast.Manager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CollapseBlast.Controller
 {
-    public class BoosterTntAnim : MonoBehaviour
+    public class BoosterTntAnim : MonoBehaviour, IBoosterAnim
     {
         [SerializeField] Animator _animator;
+        LevelManager _level;
         List<Cell> _cellsToExplode = new List<Cell>();
-        public void ExecuteAnim(Cell boosterCell)
+        int _blastedGoalItemCount;
+
+        public void ExecuteAnim(Cell boosterCell, LevelManager level)
         {
+            _level = level;
+            var goalItemType = _level.CurrentLevelData.GoalItemType;
             FindCells(boosterCell);
-            DestroyCellItems();
+            DestroyCellItems(goalItemType);
+            UpdateGoalChart(goalItemType);
             StartCoroutine(DestroyAnimOnFinish());
         }
 
@@ -21,12 +30,23 @@ namespace CollapseBlast.Controller
             _cellsToExplode.Add(boosterCell);
         }
 
-        void DestroyCellItems()
+        void DestroyCellItems(ItemType goalItemType)
         {
             foreach (var cell in _cellsToExplode)
             {
-                cell.Item?.Destroy();
+                var item = cell.Item;
+                if (item == null) continue;
+                if (item.ItemType == goalItemType)
+                {
+                    _blastedGoalItemCount++;
+                }
+                item.Destroy();
             }
+        }
+
+        void UpdateGoalChart(ItemType goalItemType)
+        {
+            _level.UpdateLevelStats(goalItemType, _blastedGoalItemCount);
         }
 
         IEnumerator DestroyAnimOnFinish()

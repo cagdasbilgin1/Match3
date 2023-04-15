@@ -3,28 +3,34 @@ using DG.Tweening;
 using System.Collections.Generic;
 using CollapseBlast.Enums;
 using CollapseBlast.Manager;
+using CollapseBlast.Abstracts;
 
 namespace CollapseBlast.Controller
 {
-    public class BoosterRocketAnim : MonoBehaviour
+    public class BoosterRocketAnim : MonoBehaviour, IBoosterAnim
     {
         [SerializeField] Transform piece1, piece2;
         [SerializeField] ParticleSystem particle1, particle2;
+        Board _board;
+        LevelManager _level;
         Camera _camera;
         Vector3 piece1Pos, piece2Pos;
         bool _isHorizontal;
         bool _isPlaying;
         int xOffset = Screen.width * 2;
         int yOffset = Screen.height;
-        Board _board;
         List<Cell> _cellsToExplode = new List<Cell>();
+        int _blastedGoalItemCount;
         bool _piece1OutOfScreen => piece1Pos.x < -xOffset || piece1Pos.x > Screen.width + xOffset || piece1Pos.y < -yOffset || piece1Pos.y > Screen.height + yOffset;
         bool _piece2OutOfScreen => piece2Pos.x < -xOffset || piece2Pos.x > Screen.width + xOffset || piece2Pos.y < -yOffset || piece2Pos.y > Screen.height + yOffset;
 
-        public void ExecuteAnim(Cell boosterCell)
+        public void ExecuteAnim(Cell boosterCell, LevelManager level)
         {
+            _level = level;
+            var goalItemType = _level.CurrentLevelData.GoalItemType;
             FindCells(boosterCell, out _isHorizontal);
-            DestroyCellItems();
+            DestroyCellItems(goalItemType);
+            UpdateGoalChart(goalItemType);
             PlayRocketAnim(_isHorizontal);
         }
 
@@ -70,11 +76,17 @@ namespace CollapseBlast.Controller
             }
         }
 
-        void DestroyCellItems()
+        void DestroyCellItems(ItemType goalItemType)
         {
             foreach (var cell in _cellsToExplode)
             {
-                cell.Item?.Destroy();
+                var item = cell.Item;
+                if (item == null) continue;
+                if (item.ItemType == goalItemType)
+                {
+                    _blastedGoalItemCount++;
+                }
+                item.Destroy();
             }
         }
 
@@ -93,6 +105,11 @@ namespace CollapseBlast.Controller
             }
 
             _isPlaying = true;
+        }
+
+        void UpdateGoalChart(ItemType goalItemType)
+        {
+            _level.UpdateLevelStats(goalItemType, _blastedGoalItemCount);
         }
 
         void OnDestroy()

@@ -79,12 +79,12 @@ namespace CollapseBlast.Manager
             FillBoard();
         }
 
-        public void UpdateLevelStats(ItemType blastedItemsType, int blastedItemsCount)
+        public void UpdateLevelStats(ItemType blastedItemsType, int blastedItemCount)
         {
             _moveCount--;
             if (_currentLevelData.GoalItemType == blastedItemsType)
             {
-                _goalCount -= blastedItemsCount;
+                _goalCount -= blastedItemCount;
             }
 
             if (_goalCount <= 0)

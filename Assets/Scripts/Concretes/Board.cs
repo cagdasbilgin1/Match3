@@ -24,11 +24,13 @@ namespace CollapseBlast
         public void Init()
         {
             var gameManager = GameManager.Instance;
+            var gamePlayCanvas = gameManager.CanvasManager.GamePlayCanvas;
             _columns = gameManager.Level.Columns;
             _rows = gameManager.Level.Rows;
             _itemManager = gameManager.ItemManager;
             _matchFinder = new MatchFinder();
-            gameManager.CanvasManager.GamePlayCanvas.OnBackToMetaButtonClickEvent += ClearObsoleteParticlesAnimations;
+            gamePlayCanvas.OnBackToMetaButtonClickEvent += ClearObsoleteParticlesAnimations;
+            gamePlayCanvas.OnClaimButtonClickEcent += ClearObsoleteParticlesAnimations;
 
             CreateCells();
             InitCells();

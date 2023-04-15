@@ -4,6 +4,7 @@ using CollapseBlast.ScriptableObjects;
 using CollapseBlast.Controller;
 using System.Collections.Generic;
 using System.Collections;
+using CollapseBlast.Abstracts;
 
 namespace CollapseBlast.Manager
 {
@@ -74,68 +75,11 @@ namespace CollapseBlast.Manager
             return item;
         }
 
-        public void ExecuteBooster(int boosterIndex, Cell cell)
+        public void ExecuteBooster(int boosterIndex, Cell boosterCell)
         {
-            var anim = Instantiate(_boosterAnimations.BoosterAnimations[boosterIndex], cell.transform.position, Quaternion.identity, _particlesAnimationsParent);
+            var anim = Instantiate(_boosterAnimations.BoosterAnimations[boosterIndex], boosterCell.transform.position, Quaternion.identity, _particlesAnimationsParent);
 
-            var goalItemType = _levelManager.CurrentLevelData.GoalItemType;
-            var blastedGoalItem = 0;
-            var cellsToExplode = new List<Cell>() { cell };
-
-
-            switch (boosterIndex)
-            {
-                case 0:
-
-                    anim.GetComponent<BoosterRocketAnim>().ExecuteAnim(cell);
-
-                    break;
-
-                case 1:
-
-                    anim.GetComponent<BoosterTntAnim>().ExecuteAnim(cell);
-
-                    break;
-
-                case 2:
-                    anim.GetComponent<BoosterLightBombAnim>().ExecuteAnim(cell);
-
-                    break;
-            }
-
-            return; //sil
-            //foreach (var cellToExplode in cellsToExplode)
-            //{
-            //    if (cellToExplode.Item.ItemType == goalItemType)
-            //    {
-            //        blastedGoalItem++;
-            //    }
-
-            //    if (cellToExplode.Item != null) cellToExplode.Item.GetComponentInChildren<SpriteRenderer>().sprite = null;
-            //}
-
-
-            foreach (var cellToExplode in cellsToExplode)
-            {
-                if (cellToExplode.Item.ItemType == goalItemType)
-                {
-                    blastedGoalItem++;
-                }
-
-                if (cellToExplode.Item != null) cellToExplode.Item.Destroy();
-            }
-
-            if (blastedGoalItem > 0)
-            {
-                Debug.Log("blasted goal item " + blastedGoalItem);
-                _levelManager.UpdateLevelStats(goalItemType, blastedGoalItem);
-            }
-        }
-
-        IEnumerator DestroyAnimOnFinish(Animator anim)
-        {
-            yield return new WaitForSeconds(anim.runtimeAnimatorController.animationClips.Length);
-            Destroy(anim.gameObject);
+            anim.GetComponent<IBoosterAnim>().ExecuteAnim(boosterCell, _levelManager);
         }
     }
 }
