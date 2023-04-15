@@ -24,6 +24,12 @@ namespace CollapseBlast.Controller
         bool _piece1OutOfScreen => piece1Pos.x < -xOffset || piece1Pos.x > Screen.width + xOffset || piece1Pos.y < -yOffset || piece1Pos.y > Screen.height + yOffset;
         bool _piece2OutOfScreen => piece2Pos.x < -xOffset || piece2Pos.x > Screen.width + xOffset || piece2Pos.y < -yOffset || piece2Pos.y > Screen.height + yOffset;
 
+        public void ExecuteSound()
+        {
+            var soundManager = GameManager.Instance.SoundManager;
+            soundManager.PlaySound(soundManager.GameSounds.RocketBoosterSound, .3f);
+        }
+
         public void ExecuteAnim(Cell boosterCell, LevelManager level)
         {
             _level = level;

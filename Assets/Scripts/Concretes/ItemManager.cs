@@ -30,7 +30,6 @@ namespace CollapseBlast.Manager
         Transform _itemsParent;
         Transform _particlesAnimationsParent;
         LevelManager _levelManager;
-        Board _board;
 
         [HideInInspector] public FallAnimData FallAnimData;
 
@@ -40,7 +39,6 @@ namespace CollapseBlast.Manager
             _itemsParent = gameManager.Board.ItemsParent;
             _particlesAnimationsParent = gameManager.Board.ParticlesAnimationsParent;
             _levelManager = gameManager.Level;
-            _board = gameManager.Board;
             FallAnimData = new FallAnimData(_startVelocity, _acceleration, _maxVelocity);
         }
 
@@ -75,9 +73,10 @@ namespace CollapseBlast.Manager
 
         public void ExecuteBooster(int boosterIndex, Cell boosterCell)
         {
-            var anim = Instantiate(_boosterAnimations.BoosterAnimations[boosterIndex], boosterCell.transform.position, Quaternion.identity, _particlesAnimationsParent);
+            var booster = Instantiate(_boosterAnimations.BoosterAnimations[boosterIndex], boosterCell.transform.position, Quaternion.identity, _particlesAnimationsParent).GetComponent<IBoosterAnim>();
 
-            anim.GetComponent<IBoosterAnim>().ExecuteAnim(boosterCell, _levelManager);
+            booster.ExecuteSound();
+            booster.ExecuteAnim(boosterCell, _levelManager);
         }
     }
 }

@@ -21,6 +21,12 @@ public class BoosterLightBombAnim : MonoBehaviour, IBoosterAnim
     Transform _particleParent;
     int _blastedGoalItemCount;
 
+    public void ExecuteSound()
+    {
+        var soundManager = GameManager.Instance.SoundManager;
+        soundManager.PlaySound(soundManager.GameSounds.LightBombBoosterSound, 0.5f);
+    }
+
     public void ExecuteAnim(Cell boosterCell, LevelManager level)
     {
         _level = level;

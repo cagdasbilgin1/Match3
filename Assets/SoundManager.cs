@@ -5,15 +5,19 @@ using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 {
-    public AudioMixer audioMixer;
-    [SerializeField] GameSoundsSO GameSounds;
+    [SerializeField] AudioMixer audioMixer;
+    [SerializeField] GameSoundsSO _gameSounds;
+    [SerializeField] AudioMixerGroup musicMixerGroup;
+    [SerializeField] AudioMixerGroup soundMixerGroup;
 
-    public AudioMixerGroup musicMixerGroup;
-    public AudioMixerGroup soundMixerGroup;
-
-    private AudioSource musicSource;
-    private AudioSource soundSource;
+    AudioSource musicSource;
+    AudioSource soundSource;
     AudioSourceManager audioSourceManager;
+
+    const string mixerMusicGroupName = "Master/Music";
+    const string mixerSoundGroupName = "Master/Sound";
+
+    public GameSoundsSO GameSounds => _gameSounds;
 
     void Start()
     {
@@ -31,17 +35,20 @@ public class SoundManager : MonoBehaviour
         PlayMetaMusic();
     }
 
-    public void PlayMusic(AudioClip music, string mixerGroupName)
+    public void PlayMusic(AudioClip music, float volume = 1, bool isLoop = true)
     {
+        musicSource.volume = volume;
+        musicSource.loop = isLoop;
         musicSource.clip = music;
-        musicSource.outputAudioMixerGroup = GetMixerGroup(mixerGroupName);
+        musicSource.outputAudioMixerGroup = GetMixerGroup(mixerMusicGroupName);
         musicSource.Play();
     }
 
-    public void PlaySound(AudioClip sound, string mixerGroupName)
+    public void PlaySound(AudioClip sound, float volume = 1f)
     {
+        soundSource.volume = volume;
         soundSource.clip = sound;
-        soundSource.outputAudioMixerGroup = GetMixerGroup(mixerGroupName);
+        soundSource.outputAudioMixerGroup = GetMixerGroup(mixerSoundGroupName);
         soundSource.Play();
     }
 
@@ -52,11 +59,11 @@ public class SoundManager : MonoBehaviour
 
     void PlayGamePlayMusic()
     {
-        PlayMusic(GameSounds.GameplayMusic, "Master/Music");
+        PlayMusic(_gameSounds.GameplayMusic);
     }
 
     void PlayMetaMusic()
     {
-        PlayMusic(GameSounds.MetaMusic, "Master/Music");
+        PlayMusic(_gameSounds.MetaMusic);
     }
 }

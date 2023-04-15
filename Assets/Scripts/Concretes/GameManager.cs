@@ -21,6 +21,7 @@ namespace CollapseBlast.Manager
         [HideInInspector] public TouchManager TouchManager;
         [HideInInspector] public HintManager HintManager;
         [HideInInspector] public CanvasManager CanvasManager;
+        [HideInInspector] public SoundManager SoundManager;
 
         void Awake()
         {
@@ -34,6 +35,7 @@ namespace CollapseBlast.Manager
             ItemManager = GetComponent<ItemManager>();
             TouchManager = GetComponent<TouchManager>();
             CanvasManager = GetComponent<CanvasManager>();
+            SoundManager = GetComponent<SoundManager>();
             InitGame();
 
             Level.OnLevelUpEvent += DisableInput;

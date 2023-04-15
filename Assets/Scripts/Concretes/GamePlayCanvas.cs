@@ -56,6 +56,8 @@ namespace CollapseBlast.Canvas
 
         void ShowLevelUpUI()
         {
+            var soundManager = GameManager.Instance.SoundManager;
+            soundManager.PlayMusic(soundManager.GameSounds.LevelWin, 1, false);
             _levelUpUI.SetActive(true);
         }
 
@@ -66,6 +68,8 @@ namespace CollapseBlast.Canvas
 
         void ShowGameOverUI()
         {
+            var soundManager = GameManager.Instance.SoundManager;
+            soundManager.PlayMusic(soundManager.GameSounds.LevelLose, 1, false);
             _gameOverUI.SetActive(true);
         }
 

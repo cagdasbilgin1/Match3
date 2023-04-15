@@ -14,4 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameplayMusic: {fileID: 8300000, guid: fcca1e321f92bf041ab0991e4f9292cf, type: 3}
   metaMusic: {fileID: 8300000, guid: c1f6867880b92ec438cbf3432dd43a29, type: 3}
-  itemBlastSound: {fileID: 0}
+  levelWin: {fileID: 8300000, guid: 2d578212a99fa9943adb4071c33423bc, type: 3}
+  levelLose: {fileID: 8300000, guid: cd319949735e41640a6a6a75d7531b85, type: 3}
+  itemBlastSound: {fileID: 8300000, guid: 35ed1549f64897848a09ee6286fda090, type: 3}
+  rocketBoosterSound: {fileID: 8300000, guid: 559bd4820619ab049bf268388af0c31a, type: 3}
+  tntBoosterSound: {fileID: 8300000, guid: e1bed4dd7b6b8ba4dbcf32f7f0691bd0, type: 3}
+  lightBombBoosterSound: {fileID: 8300000, guid: 0f6bf789a797e3f43be04b171e0d7d48, type: 3}

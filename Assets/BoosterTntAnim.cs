@@ -14,6 +14,12 @@ namespace CollapseBlast.Controller
         List<Cell> _cellsToExplode = new List<Cell>();
         int _blastedGoalItemCount;
 
+        public void ExecuteSound()
+        {
+            var soundManager = GameManager.Instance.SoundManager;
+            soundManager.PlaySound(soundManager.GameSounds.TntBoosterSound, .5f);
+        }
+
         public void ExecuteAnim(Cell boosterCell, LevelManager level)
         {
             _level = level;
@@ -40,10 +46,6 @@ namespace CollapseBlast.Controller
                 {
                     _blastedGoalItemCount++;
                 }
-                //if(item.ItemType == ItemType.Booster)
-                //{
-                //    GameManager.Instance.ItemManager.ExecuteBooster(item.TypeIndex, item.Cell);
-                //}
 
                 item.Destroy();
             }

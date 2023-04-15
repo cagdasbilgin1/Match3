@@ -152,6 +152,7 @@ namespace CollapseBlast
             if (partOfMatchedCells == null) return;
 
             GameManager.Instance.Level.UpdateLevelStats(itemType, partOfMatchedCells.Count);
+            GameManager.Instance.SoundManager.PlaySound(GameManager.Instance.SoundManager.GameSounds.ItemBlastSound);
 
             foreach (var matchedCell in partOfMatchedCells)
             {

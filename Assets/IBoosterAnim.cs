@@ -4,6 +4,7 @@ namespace CollapseBlast.Abstracts
 {
     public interface IBoosterAnim
     {
-        public void ExecuteAnim(Cell boosterCell, LevelManager level);
+        void ExecuteSound();
+        void ExecuteAnim(Cell boosterCell, LevelManager level);
     }
 }

@@ -453,10 +453,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Board: {fileID: 1388198026988819237}
+  _gamePlaySceneElements: []
+  _metaSceneElements: []
   Level: {fileID: 0}
   ItemManager: {fileID: 0}
   TouchManager: {fileID: 0}
   CanvasManager: {fileID: 0}
+  SoundManager: {fileID: 0}
 --- !u!114 &8767403435434524835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -534,3 +537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa3156dc4b735c34eb590a8a033ee409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 0}
+  _gameSounds: {fileID: 11400000, guid: 823a2a70c97b89a4f8e43307e365be05, type: 2}
+  musicMixerGroup: {fileID: 0}
+  soundMixerGroup: {fileID: 0}
