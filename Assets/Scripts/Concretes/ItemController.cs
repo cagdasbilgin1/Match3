@@ -13,9 +13,11 @@ namespace CollapseBlast.Controller
         FallAnimation _fallAnimation;
         ItemType _itemType;
         int _typeIndex;
+        bool _isNotClickable;
 
         public ItemType ItemType => _itemType;
         public bool IsBooster => _itemType == ItemType.Booster;
+        public bool IsNotClickable => _isNotClickable;
         public int TypeIndex { get { return _typeIndex; } set { _typeIndex = value; } }
         public bool IsHorizontalRocketBooster;
 
@@ -71,6 +73,8 @@ namespace CollapseBlast.Controller
 
         public void Destroy()
         {
+            if (this == null) return;
+
             _cell.Item = null;
             _cell = null;
             Destroy(gameObject);
@@ -84,6 +88,11 @@ namespace CollapseBlast.Controller
         public void ArrangeSorting()
         {
             _spriteRenderer.sortingOrder = _cell.Y;
+        }
+
+        public void ArrangeClickable(bool clickable)
+        {
+            _isNotClickable = !clickable;
         }
 
         private void Update()

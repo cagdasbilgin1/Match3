@@ -1,5 +1,7 @@
 using CollapseBlast.Abstracts;
 using CollapseBlast.Utilities;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CollapseBlast.Manager
@@ -7,6 +9,11 @@ namespace CollapseBlast.Manager
     public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         public Board Board;
+        public event Action gamePlaySceneOpenedEvent;
+        public event Action metaSceneOpenedEvent;
+
+        [SerializeField] List<GameObject> _gamePlaySceneElements;
+        [SerializeField] List<GameObject> _metaSceneElements;        
 
         [HideInInspector] public LevelManager Level;
         [HideInInspector] public ItemManager ItemManager;
@@ -14,6 +21,7 @@ namespace CollapseBlast.Manager
         [HideInInspector] public TouchManager TouchManager;
         [HideInInspector] public HintManager HintManager;
         [HideInInspector] public CanvasManager CanvasManager;
+        [HideInInspector] public SoundManager SoundManager;
 
         void Awake()
         {
@@ -27,12 +35,11 @@ namespace CollapseBlast.Manager
             ItemManager = GetComponent<ItemManager>();
             TouchManager = GetComponent<TouchManager>();
             CanvasManager = GetComponent<CanvasManager>();
+            SoundManager = GetComponent<SoundManager>();
             InitGame();
 
             Level.OnLevelUpEvent += DisableInput;
             Level.OnGameOverEvent += DisableInput;
-            CanvasManager.GamePlayCanvas.OnBackToMetaButtonClickEvent += DisableInput;
-            CanvasManager.MetaCanvas.OnLevelButtonClickEvent += EnableInput;
         }
 
         public void InitGame()
@@ -47,25 +54,41 @@ namespace CollapseBlast.Manager
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Level.LevelUp();
-                Board.ClearElements();
-                InitGame();
-            }
-
             FallManager.TickUpdate();
             HintManager.TickUpdate();
         }
 
         public void EnableInput()
         {
+            //only affects item touches
             TouchManager.enabled = true;
         }
 
         public void DisableInput()
         {
+            //only affects item touches
             TouchManager.enabled = false;
+        }
+
+        public void ToggleScene()
+        {
+            var isGameplayActive = false;
+            foreach (var gameplaySceneElement in _gamePlaySceneElements)
+            {
+                gameplaySceneElement.SetActive(!gameplaySceneElement.activeInHierarchy);
+                isGameplayActive = gameplaySceneElement.activeInHierarchy;
+            }
+
+            if (isGameplayActive)
+            {
+                EnableInput();
+                gamePlaySceneOpenedEvent?.Invoke();
+            }
+            else
+            {
+                DisableInput();
+                metaSceneOpenedEvent?.Invoke();
+            }
         }
     }
 }

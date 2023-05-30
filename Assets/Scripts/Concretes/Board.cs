@@ -17,17 +17,22 @@ namespace CollapseBlast
         public SpriteRenderer BoardInsideSprite;
         public SpriteMask BoardMask;
         [HideInInspector] public List<Cell> Cells;
+        GameManager _gameManager;
+        SoundManager _soundManager;
         ItemManager _itemManager;
         MatchFinder _matchFinder;
         private int _columns, _rows;
 
         public void Init()
         {
-            var gameManager = GameManager.Instance;
-            _columns = gameManager.Level.Columns;
-            _rows = gameManager.Level.Rows;
-            _itemManager = gameManager.ItemManager;
+            _gameManager = GameManager.Instance;
+            _soundManager = _gameManager.SoundManager;
+            var gamePlayCanvas = _gameManager.CanvasManager.GamePlayCanvas;
+            _columns = _gameManager.Level.Columns;
+            _rows = _gameManager.Level.Rows;
+            _itemManager = _gameManager.ItemManager;
             _matchFinder = new MatchFinder();
+            _gameManager.metaSceneOpenedEvent += ClearObsoleteParticlesAnimations;
 
             CreateCells();
             InitCells();
@@ -52,7 +57,7 @@ namespace CollapseBlast
 
             BoardOutsideSprite.transform.localScale = new Vector2(columnUnitWidth, columnUnitWidth);
 
-            var ItemEdgeUnit = Screen.width / _columns; 
+            var ItemEdgeUnit = Screen.width / _columns;
             float boardHeight = ItemEdgeUnit * _rows;
             float boardWidth = ItemEdgeUnit * _columns;
             while (boardHeight > Screen.height * .48f || boardWidth > Screen.width * .9f)
@@ -102,7 +107,7 @@ namespace CollapseBlast
         {
             foreach (var cell in Cells)
             {
-                if(cell.Item != null) Destroy(cell.Item.gameObject);
+                if (cell.Item != null) Destroy(cell.Item.gameObject);
                 Destroy(cell.gameObject);
             }
             Cells.Clear();
@@ -118,7 +123,7 @@ namespace CollapseBlast
 
         public void CellTapped(Cell cell)
         {
-            if (cell == null || cell.Item == null) return;
+            if (cell == null || cell.Item == null || cell.Item.IsNotClickable) return;
 
             var tappedItem = cell.Item;
             var tappedCellIsBooster = tappedItem.IsBooster;
@@ -128,7 +133,8 @@ namespace CollapseBlast
             if (!tappedCellIsBooster && tappedCellTypeIndex > 0) //create booster
             {
                 cell.Item = GameManager.Instance.ItemManager.CreateItem(ItemType.Booster, cell.transform.localPosition, tappedCellTypeIndex - 1);
-            }else if(tappedCellIsBooster)
+            }
+            else if (tappedCellIsBooster)
             {
                 var boosterIndex = tappedItem.TypeIndex;
 
@@ -148,7 +154,8 @@ namespace CollapseBlast
 
             if (partOfMatchedCells == null) return;
 
-            GameManager.Instance.Level.UpdateLevelStats(itemType, partOfMatchedCells.Count);
+            _gameManager.Level.UpdateLevelStats(itemType, partOfMatchedCells.Count);
+            _soundManager.PlaySound(_soundManager.GameSounds.ItemBlastSound);
 
             foreach (var matchedCell in partOfMatchedCells)
             {
@@ -171,7 +178,7 @@ namespace CollapseBlast
                     break;
                 case Direction.Right:
                     x += 1;
-                    break;                
+                    break;
                 case Direction.Left:
                     x -= 1;
                     break;
@@ -221,7 +228,15 @@ namespace CollapseBlast
 
         public List<Cell> GetCellsWithItemType(ItemType itemType)
         {
-            return Cells.Where(cell => cell.Item.ItemType == itemType).ToList();
+            return Cells.Where(cell => cell.Item?.ItemType == itemType).ToList();
+        }
+
+        void ClearObsoleteParticlesAnimations()
+        {
+            foreach (Transform obsoleteParticle in ParticlesAnimationsParent)
+            {
+                Destroy(obsoleteParticle.gameObject);
+            }
         }
     }
 }

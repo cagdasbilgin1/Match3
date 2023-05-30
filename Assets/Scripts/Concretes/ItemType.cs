@@ -7,11 +7,7 @@
         BlueBox,
         YellowBox,
         PurpleBox,
-        PinkBox,
-        //Rocket,
-        //Tnt,
-        //LightBomb
-        
+        PinkBox,        
         Booster
     }
 }

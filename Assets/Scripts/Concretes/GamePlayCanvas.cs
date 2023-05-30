@@ -1,6 +1,5 @@
 using CollapseBlast.Manager;
 using CollapseBlast.ScriptableObjects;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,8 +17,6 @@ namespace CollapseBlast.Canvas
         ItemManager _itemManager;
         LevelDataSO _levelData;
 
-        public event Action OnBackToMetaButtonClickEvent;
-
         private void Awake()
         {
             var gameManager = GameManager.Instance;
@@ -31,7 +28,7 @@ namespace CollapseBlast.Canvas
             _level.OnLevelUpEvent += ShowLevelUpUI;
             _level.OnGameOverEvent += ShowGameOverUI;
             _level.OnLevelStatsUpdateEvent += UpdateLevelStatsUI;
-            gameManager.CanvasManager.MetaCanvas.OnLevelButtonClickEvent += ResetUIs;
+            gameManager.gamePlaySceneOpenedEvent += ResetUIs;
         }
 
         public void ResetUIs()
@@ -48,7 +45,7 @@ namespace CollapseBlast.Canvas
 
         public void OnBackToMetaButtonClick()
         {
-            OnBackToMetaButtonClickEvent?.Invoke();
+            GameManager.Instance.ToggleScene();
         }
 
         public void UpdateLevelStatsUI()
@@ -57,18 +54,47 @@ namespace CollapseBlast.Canvas
             _levelMovesCounterText.text = _level.MoveCount.ToString();
         }
 
-        public void ShowLevelUpUI()
+        void ShowLevelUpUI()
         {
+            var soundManager = GameManager.Instance.SoundManager;
+            soundManager.PlayMusic(soundManager.GameSounds.LevelWin, 1, false);
             _levelUpUI.SetActive(true);
         }
 
-        public void ShowGameOverUI()
+        void DismissLevelUpUI()
         {
+            _levelUpUI.SetActive(false);
+        }
+
+        void ShowGameOverUI()
+        {
+            var soundManager = GameManager.Instance.SoundManager;
+            soundManager.PlayMusic(soundManager.GameSounds.LevelLose, 1, false);
             _gameOverUI.SetActive(true);
+        }
+
+        void DismissGameOverUI()
+        {
+            _gameOverUI.SetActive(false);
         }
 
         public void OnClaimButtonClick()
         {
+            GameManager.Instance.ToggleScene();
+
+            DismissLevelUpUI();
+            
+            var gameManager = GameManager.Instance;
+            gameManager.Board.ClearElements();
+            gameManager.InitGame();
+        }
+
+        public void OnGoHomeButtonClick()
+        {
+            GameManager.Instance.ToggleScene();
+
+            DismissGameOverUI();
+
             var gameManager = GameManager.Instance;
             gameManager.Board.ClearElements();
             gameManager.InitGame();

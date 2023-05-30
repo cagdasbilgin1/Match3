@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 8767403435434524832}
   - component: {fileID: 8767403435434524839}
   - component: {fileID: 8767403435434524834}
+  - component: {fileID: 7517236996765109520}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -452,10 +453,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Board: {fileID: 1388198026988819237}
+  _gamePlaySceneElements: []
+  _metaSceneElements: []
   Level: {fileID: 0}
   ItemManager: {fileID: 0}
   TouchManager: {fileID: 0}
   CanvasManager: {fileID: 0}
+  SoundManager: {fileID: 0}
 --- !u!114 &8767403435434524835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,3 +525,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GamePlayCanvas: {fileID: 0}
   MetaCanvas: {fileID: 0}
+--- !u!114 &7517236996765109520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8767403435434524842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3156dc4b735c34eb590a8a033ee409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 0}
+  _gameSounds: {fileID: 11400000, guid: 823a2a70c97b89a4f8e43307e365be05, type: 2}
+  musicMixerGroup: {fileID: 0}
+  soundMixerGroup: {fileID: 0}

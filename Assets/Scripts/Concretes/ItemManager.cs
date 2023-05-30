@@ -2,8 +2,7 @@
 using CollapseBlast.Enums;
 using CollapseBlast.ScriptableObjects;
 using CollapseBlast.Controller;
-using System.Collections.Generic;
-using System.Collections;
+using CollapseBlast.Abstracts;
 
 namespace CollapseBlast.Manager
 {
@@ -31,7 +30,6 @@ namespace CollapseBlast.Manager
         Transform _itemsParent;
         Transform _particlesAnimationsParent;
         LevelManager _levelManager;
-        Board _board;
 
         [HideInInspector] public FallAnimData FallAnimData;
 
@@ -41,7 +39,6 @@ namespace CollapseBlast.Manager
             _itemsParent = gameManager.Board.ItemsParent;
             _particlesAnimationsParent = gameManager.Board.ParticlesAnimationsParent;
             _levelManager = gameManager.Level;
-            _board = gameManager.Board;
             FallAnimData = new FallAnimData(_startVelocity, _acceleration, _maxVelocity);
         }
 
@@ -74,91 +71,12 @@ namespace CollapseBlast.Manager
             return item;
         }
 
-        public void ExecuteBooster(int boosterIndex, Cell cell)
+        public void ExecuteBooster(int boosterIndex, Cell boosterCell)
         {
-            var anim = Instantiate(_boosterAnimations.BoosterAnimations[boosterIndex], cell.transform.position, Quaternion.identity, _particlesAnimationsParent);
+            var booster = Instantiate(_boosterAnimations.BoosterAnimations[boosterIndex], boosterCell.transform.position, Quaternion.identity, _particlesAnimationsParent).GetComponent<IBoosterAnim>();
 
-
-            var goalItemType = _levelManager.CurrentLevelData.GoalItemType;
-            var blastedGoalItem = 0;
-            var cellsToExplode = new List<Cell>() { cell };
-
-
-            switch (boosterIndex)
-            {
-                case 0:
-                    var isHorizontalRocket = cell.Item.IsHorizontalRocketBooster;
-
-                    var direction1 = isHorizontalRocket ? Direction.Left : Direction.Up;
-                    var direction2 = isHorizontalRocket ? Direction.Right : Direction.Down;
-                    var cell1 = _board.GetNeighbourWithDirection(cell, direction1);
-                    var cell2 = _board.GetNeighbourWithDirection(cell, direction2);
-                    
-                    while (true)
-                    {
-                        if (cell1 != null)
-                        {
-                            cellsToExplode.Add(cell1);
-                            cell1 = _board.GetNeighbourWithDirection(cell1, direction1);
-                        }
-                        if (cell2 != null)
-                        {
-                            cellsToExplode.Add(cell2);
-                            cell2 = _board.GetNeighbourWithDirection(cell2, direction2);
-                        }
-
-                        if (cell1 == null && cell2 == null) break;
-                    }
-
-                    anim.GetComponent<BoosterRocketAnim>().ExecuteRocketAnim(isHorizontalRocket);
-
-                    break;
-
-                case 1:
-                    cellsToExplode.AddRange(cell.CellsInTheBombBoosterArea());
-                    StartCoroutine(DestroyAnimOnFinish(anim.GetComponent<Animator>()));
-
-                    break;
-
-                case 2:
-                    var rndItemType = _board.GetRandomCellAtBoard().Item.ItemType;
-                    cellsToExplode.AddRange(_board.GetCellsWithItemType(rndItemType));
-
-                    break;
-            }
-
-            //foreach (var cellToExplode in cellsToExplode)
-            //{
-            //    if (cellToExplode.Item.ItemType == goalItemType)
-            //    {
-            //        blastedGoalItem++;
-            //    }
-
-            //    if (cellToExplode.Item != null) cellToExplode.Item.GetComponentInChildren<SpriteRenderer>().sprite = null;
-            //}
-
-
-            foreach (var cellToExplode in cellsToExplode)
-            {
-                if (cellToExplode.Item.ItemType == goalItemType)
-                {
-                    blastedGoalItem++;
-                }
-
-                if (cellToExplode.Item != null) cellToExplode.Item.Destroy();
-            }
-
-            if (blastedGoalItem > 0)
-            {
-                Debug.Log("blasted goal item " + blastedGoalItem);
-                _levelManager.UpdateLevelStats(goalItemType, blastedGoalItem);
-            }
-        }
-
-        IEnumerator DestroyAnimOnFinish(Animator anim)
-        {
-            yield return new WaitForSeconds(anim.runtimeAnimatorController.animationClips.Length);
-            Destroy(anim.gameObject);
+            booster.ExecuteSound();
+            booster.ExecuteAnim(boosterCell, _levelManager);
         }
     }
 }
